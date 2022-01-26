@@ -16,7 +16,7 @@
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
-    <WebBrowserUrl>http://localhost:8010/report_Art/?sesion_id=4858490823&amp;u=JMATA</WebBrowserUrl>
+    <WebBrowserUrl>http://localhost:8010/report_Art/?sesion_id=278491666&amp;u=JMATA</WebBrowserUrl>
     <LaunchProvider>Django launcher</LaunchProvider>
     <DjangoSettingsModule>Reports.settings</DjangoSettingsModule>
     <OutputPath>.</OutputPath>
