@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+{% load static %}
+<html ng-app="MyControllerAngCntrts" lang="es" xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta charset="utf-8" />
+    <title>Report</title>
+    <link rel="stylesheet" href="{% static "app/css/reportMain.css" %}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{% static "app/scripts/controllerProcesos.js" %}" ></script><!-- -->
+</head>
+
+<body ng-controller="ControllerHTTPCntrts" ng-init="ReporProcesos()">
+
+    <header>
+        <nav>                
+            <ul class="nav-right-section">
+                <li><a><img src="{% static "app/images/edilogo.svg" %}"/></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <br><br>
+
+    {% verbatim %}
+
+    <!-- Repor Articulos -->
+    <div class="container" >
+        <div class="card" >
+            <h5 class="card-header" style="background: rgb(0, 106, 9); color: white">Reporte Contratos por Procesos:</h5>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row g-3">
+
+                        <div class="col-md-4" ng-show="rpPrcs">
+                            <div class="input-group">
+                                <select ng-model="datosReport.selecEmpresas" class="form-select">
+                                    <option selected disabled value="">Empresas</option>
+                                    <option ng-repeat="m in listaEmpresas">{{ m.EMPRESA_ID }} - {{ m.DESCRIPCION }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" ng-show="rpPrcs">
+                            <div class="input-group">
+                                <select ng-model="datosReport.selecEstado" class="form-select">
+                                    <option selected disabled value="">Estado</option>
+                                    <option ng-repeat="e in listaEstado">{{ e.ESTADO_ID }} - {{ e.DESCRIPCION }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" ng-show="rpPrcs">
+                            <div class="input-group">
+                                <select ng-model="datosReport.selecEstadoRever" class="form-select">
+                                    <option selected disabled value="">Estado</option>
+                                    <option ng-repeat="r in listaEstadoRevers">{{ r.ESTADO_ID }} - {{ r.DESCRIPCION }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3" ng-show="rpPrcs">
+                            <br>
+                            <div class="input-group">
+                                <select ng-model="datosReport.selecContratos" class="form-select">
+                                    <option selected disabled value="">Contratos</option>
+                                    <option value="TODOS">TODOS</option>
+                                    <option value="APLICAN">APLICAN</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3" ng-show="rpPrcs">
+                            <br>
+                            <div class="input-group">
+                                <select ng-model="datosReport.selecInvent" class="form-select">
+                                    <option selected disabled value="">Inventario</option>
+                                    <option value="TODOS">TODOS</option>
+                                    <option value="APLICADOS">APLICADOS</option>
+                                    <option value="NO APLICADOS">NO APLICADOS</option>
+                                    <option value="NO APLICA">NO APLICA</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3" ng-show="rpPrcs">
+                            <br>
+                            <div class="input-group">
+                                <select ng-model="datosReport.selecCobranza" class="form-select">
+                                    <option selected disabled value="">Cobranza</option>
+                                    <option value="TODOS">TODOS</option>
+                                    <option value="APLICADOS">APLICADOS</option>
+                                    <option value="NO APLICADOS">NO APLICADOS</option>
+                                    <option value="NO APLICA">NO APLICA</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3" ng-show="rpPrcs">
+                            <br>
+                            <div class="input-group">
+                                <select ng-model="datosReport.selecClub" class="form-select">
+                                    <option selected disabled value="">Club Lectores</option>
+                                    <option value="TODOS">TODOS</option>
+                                    <option value="APLICADOS">APLICADOS</option>
+                                    <option value="NO APLICADOS">NO APLICADOS</option>
+                                    <option value="NO APLICA">NO APLICA</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" ng-show="rpPrcs">
+                            <br>
+                            <div class="input-group">
+                                <label for="start"><strong>Clave Integradora: </strong></label>
+                                <input ng-model="datosReport.claveIntr" type="text">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" ng-show="rpPrcs">
+                            <br>
+                            <div class="input-group">
+                                <label for="start"><strong>Evento Inicial: </strong></label>
+                                <input ng-model="datosReport.eveIni" type="text">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" ng-show="rpPrcs">
+                            <br>
+                            <div class="input-group">
+                                <label for="start"><strong>Evento Final: </strong></label>
+                                <input ng-model="datosReport.eveFin" type="text">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6" ng-show="rpPrcs">
+                            <br>
+                            <div class="input-group">
+                                <label for="start"><strong>Fecha Inicial : </strong></label>
+                                <input ng-model="datosReport.FechaInicial" type="date" min="" max="2100-12-31">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6" ng-show="rpPrcs">
+                            <br>
+                            <div class="input-group">
+                                <label for="start"><strong>Fecha Final : </strong></label>
+                                <input ng-model="datosReport.FechaFin" type="date" min="" max="2100-12-31">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <br><br>
+                <button ng-click="generarPDF()" ng-disabled="!datosReport.selecEstado || !datosReport.selecEstadoRever || !datosReport.selecEmpresas || 
+                                                !datosReport.selecContratos || !datosReport.selecInvent || !datosReport.selecCobranza || 
+                                                !datosReport.selecClub || !datosReport.FechaInicial || !datosReport.FechaFin
+                                                " style="float:right" class="btn btn-outline-primary btn-sm">Generar Reporte</button>
+            </div>
+        </div>
+    </div>
+    <!-- Fin Repor Articulos -->
+
+    {% endverbatim %}
+
+
+    <div class="container body-content">
+        <hr/>
+        <footer>
+            <font size=4><p>Edilar S.A. de C.V.</p></font>
+        </footer>
+    </div>
+
+</body>
+</html>
