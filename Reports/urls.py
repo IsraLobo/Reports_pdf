@@ -50,8 +50,18 @@ urlpatterns = [
     url('report_Pro/', vistas.report_Pro),
     url('datos_Proyec/', vistas.datos_Proyec),
     url('info_Proyec/', vistas.info_Proyec),
+
     url('report_Art/', vistas.report_Art),
     url('datos_Art/', vistas.datos_Art),
     url('info_Arts/', vistas.info_Arts),
+
+    url('repor_ventas/', vistas.repor_ventas),
+    url('datos_ventas/', vistas.datos_ventas),
+    url('info_ventas/', vistas.info_ventas),
+
+
+    url('repor_procesos/', vistas.repor_procesos),
+    url('datos_procesos/', vistas.datos_procesos),
+    url('info_procesos/', vistas.info_procesos),
 
 ]

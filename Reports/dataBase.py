@@ -171,7 +171,94 @@ pass
 
 
 
+def cosult_repor_ventas(body_Info):
+    try:
+        query_inf_vent = ''' select estado_id,
+                                   descripcion,
+                              (select sum(total_eventos)
+                               from cm_control_recepcion
+                            where estado = estado_id
+                            and venta_del = nvl(TO_DATE('{fechI}','DD/MM/RRRR'), venta_del)
+                            and venta_al = nvl(TO_DATE('{fechF}','DD/MM/RRRR'), venta_al)) total_eventos,
+                              (select sum(monto)
+                               from cm_control_recepcion
+                            where estado = estado_id
+                            and venta_del = nvl(TO_DATE('{fechI}','DD/MM/RRRR'), venta_del)
+                            and venta_al = nvl(TO_DATE('{fechF}','DD/MM/RRRR'), venta_al)) monto_recibido,
+                                              (select sum(monto_ventas)
+                               from cm_control_recepcion
+                            where estado = estado_id
+                            and venta_del = nvl(TO_DATE('{fechI}','DD/MM/RRRR'), venta_del)
+                            and venta_al = nvl(TO_DATE('{fechF}','DD/MM/RRRR'), venta_al)) monto_ventas,
+                                            (select sum(eventos_ventas)
+                               from cm_control_recepcion
+                            where estado = estado_id
+                            and venta_del = nvl(TO_DATE('{fechI}','DD/MM/RRRR'), venta_del)
+                            and venta_al = nvl(TO_DATE('{fechF}','DD/MM/RRRR'), venta_al)) eventos_ventas
+                            from cm_estado
+                            where se_vende = 'S'
+                            and estado_id between nvl('{estado}', estado_id) and nvl('{estaRv}', estado_id)
+                            order by estado_id '''.format(**body_Info)
+        conex = OracleConnection()
+        resulVent = conex.exeute_query_descr(query_inf_vent)
+        conex.close()
+        return resulVent
+    except Exception as errVnt:
+        return 'No se pudo conectar a la BD [ERROR]: ', errVnt
+pass
 
+
+
+def complement_vnts(inf_compl):
+    try:
+        query_complmnt = ''' SELECT region, monto, estado FROM cm_reporte_ventas WHERE venta_del = NVL( TO_DATE('{fechI}','DD/MM/RRRR'), venta_del)
+                             AND venta_al = NVL( TO_DATE('{fechF}','DD/MM/RRRR'), venta_al) AND ESTADO = '{estado}' ORDER BY region '''.format(**inf_compl)
+        
+        conex = OracleConnection()
+        resulCompl = conex.exeute_query_descr(query_complmnt)
+        conex.close()
+        return resulCompl
+    except Exception as errCmplV:
+        return 'No se pudo conectar a la BD [ERROR]: ', errCmplV
+pass
+
+
+
+def empresas_Contratos():
+    try:
+        query_consul_empre = ''' select empresa_id, descripcion from cm_estructura_empresa Union all select 'T' empresa, 'TODAS' nombre  
+                                 From Dual order by descripcion '''
+        conex = OracleConnection()
+        resul_cosul_empre = conex.exeute_query_descr(query_consul_empre)
+        conex.close()
+        return resul_cosul_empre
+    except Exception as errEmpre:
+        return 'No se pudo conectar a la BD [ERROR]: ', errEmpre
+pass
+
+
+
+def consul_ifn_Ctrts(body_Info):
+    try:
+        query_Prin_Ctrs = ''' SELECT * FROM(select  est.descripcion  estado_n, (select nombre_corto from cm_estructura_empresa where 
+                              empresa_id = eve.empresa) empresa, eve.evento_id, con.vale, con.fecha_inicio_cobro, con.cuota, con.afiliado,
+                              con.categoria_contrato, eve.fecha, con.status, con.fecha_inv, con.fecha_cl, con.transferido, con.fecha_cobranza,
+                              decode(fecha_inv, '', 2,1) inventario, decode(fecha_inv, '', 1,0) No_aplicados_inv, decode(fecha_inv, '', 0,1)
+                              aplicados_inv, decode(fecha_cobranza, '', 1,0) No_aplicados_cob, decode(fecha_cobranza, '', 0,1) Aplicados_cob,
+                              decode(fecha_cl, '', 1,0) No_Aplicados_cl, decode(fecha_cl, '', 0,1) Aplicados_cl,
+                              (select count(*) from cm_contrato_det where  contrato = con.contrato_prin_id) articulos from cm_evento eve,
+                              cm_contrato_principal con, cm_status_vta st, cm_estado est where  eve.evento_id = con.evento 
+                              and eve.estado = est.estado_id and st.status_id = con.status and st.puesto = con.puesto 
+                              and eve.VENTA_TOTAL = eve.CIFRA_CONTROL 
+                              and eve.estado between Nvl('{estado}',eve.estado) and Nvl('{estaRv}', eve.estado) and eve.fecha  between Nvl(TO_DATE('{fechI}','DD/MM/RRRR'), eve.fecha) and Nvl(TO_DATE('{fechF}','DD/MM/RRRR'), eve.fecha) and eve.empleado = Nvl('{cvintegradora}', eve.empleado) and eve.evento_id between Nvl('{cvini}', eve.evento_id) and Nvl('{cvfin}', eve.evento_id) and eve.empresa in (decode('{id_empre}', 'T', eve.empresa), '{id_empre}') {filter_1} order by eve.evento_id, con.vale) {filter_2}       
+                               '''.format(**body_Info)
+        conex = OracleConnection()
+        resulInfCtrs = conex.exeute_query_descr(query_Prin_Ctrs)
+        conex.close()
+        return resulInfCtrs
+    except Exception as errInfCtrs:
+        return 'No se pudo conectar a la BD [ERROR]: ', errInfCtrs
+pass
 
 
 #C:\app\Israel-Perez\product\11.2.0\client_1
@@ -181,3 +268,14 @@ pass
 #"C:\\app\\Israel-Perez\\product\\11.2.0\\client_1\\oci.dll is not the correct architecture". 
 
 #See https://cx-oracle.readthedocs.io/en/latest/user_guide/installation.html for help'
+
+
+
+
+
+
+
+
+
+#01/JAN/2015
+#15/MAR/2021

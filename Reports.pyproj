@@ -16,7 +16,7 @@
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
-    <WebBrowserUrl>http://localhost:8010/report_Art/?sesion_id=278491666&amp;u=JMATA</WebBrowserUrl>
+    <WebBrowserUrl>http://localhost:8010/repor_procesos/?sesion_id=238513695&amp;u=JMATA</WebBrowserUrl>
     <LaunchProvider>Django launcher</LaunchProvider>
     <DjangoSettingsModule>Reports.settings</DjangoSettingsModule>
     <OutputPath>.</OutputPath>
@@ -50,6 +50,12 @@
     <Compile Include="Reports\dataBase.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Reports\reportProcesos.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reports\reportVentas.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Reports\vistas.py">
       <SubType>Code</SubType>
     </Compile>
@@ -76,8 +82,12 @@
     <Content Include="app\static\app\css\reportMain.css" />
     <Content Include="app\static\app\scripts\controller.js" />
     <Content Include="app\static\app\scripts\controllerArts.js" />
+    <Content Include="app\static\app\scripts\controllerProcesos.js" />
+    <Content Include="app\static\app\scripts\controllerVentas.js" />
+    <Content Include="app\templates\reporPrinProcesos.html" />
     <Content Include="app\templates\reportPrinArt.html" />
     <Content Include="app\templates\reporPrincipal.html" />
+    <Content Include="app\templates\reportPrinVentas.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />
